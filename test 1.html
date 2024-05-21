@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Визитная карточка</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            background-color: #ffcccb; /* светло-розовый цвет фона */
+            color: #000000; /* черный цвет текста */
+        }
+        #card {
+            display: none;
+            border: 1px solid #000;
+            padding: 20px;
+            margin-top: 20px;
+            background-color: #ffffff;
+            border-radius: 10px;
+        }
+        .avatar {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+        .info {
+            margin-top: 10px;
+            font-size: 18px;
+        }
+        .info span {
+            display: block;
+            margin-bottom: 5px;
+        }
+        .name { color: #ff0000; } /* красный цвет текста */
+        .surname { color: #0000ff; } /* синий цвет текста */
+        .age { color: #008000; } /* зеленый цвет текста */
+        .gender { color: #800080; } /* фиолетовый цвет текста */
+        .position { color: #800080; } /* фиолетовый цвет текста */
+        #createButton {
+            background-color: #008000; /* зеленый цвет кнопки */
+            color: #ffffff; /* белый цвет текста кнопки */
+            padding: 10px 20px; /* больший размер кнопки */
+            font-size: 16px; /* размер шрифта кнопки */
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <h1>Создание визитной карточки</h1>
+    <div id="form">
+        <label for="firstName">Имя:</label>
+        <input type="text" id="firstName" placeholder="Введите ваше имя" oninput="validateName(this)"><br><br>
+        <label for="lastName">Фамилия:</label>
+        <input type="text" id="lastName" placeholder="Введите вашу фамилию" oninput="validateName(this)"><br><br>
+        <label for="age">Возраст:</label>
+        <input type="number" id="age" placeholder="Введите ваш возраст"><br><br>
+        <label for="gender">Пол:</label>
+        <select id="gender">
+            <option value="male">Мужской</option>
+            <option value="female">Женский</option>
+            <option value="other">Я не такой, как все ;)</option>
+        </select><br><br>
+        <label>Выберите должность:</label><br>
+        <input type="checkbox" id="user" name="position" value="user">
+        <label for="user">User</label><br>
+        <input type="checkbox" id="admin" name="position" value="admin">
+        <label for="admin">Admin</label><br><br>
+        <button id="createButton" onclick="createCard()">Создать визитную карточку</button>
+    </div>
+    <div id="card">
+        <img id="cardAvatar" src="" alt="Avatar" class="avatar">
+        <div class="info">
+            <span class="name" id="cardFirstName"></span>
+            <span class="surname" id="cardLastName"></span>
+            <span class="age" id="cardAge"></span>
+            <span class="gender" id="cardGender"></span>
+            <span class="position" id="cardPosition"></span>
+        </div>
+    </div>
+
+    <script>
+        function validateName(input) {
+            input.value = input.value.replace(/[^a-zA-Zа-яА-ЯёЁ\s]/g, '');
+        }
+
+        function checkFormCompletion() {
+            var firstName = document.getElementById('firstName').value;
+            var lastName = document.getElementById('lastName').value;
+            var age = document.getElementById('age').value;
+            var gender = document.getElementById('gender').value;
+            var user = document.getElementById('user').checked;
+            var admin = document.getElementById('admin').checked;
+
+            if (firstName && lastName && age && gender && (user || admin)) {
+                document.getElementById('createButton').style.display = 'block';
+            } else {
+                document.getElementById('createButton').style.display = 'none';
+            }
+        }
+
+        document.getElementById('firstName').addEventListener('input', checkFormCompletion);
+        document.getElementById('lastName').addEventListener('input', checkFormCompletion);
+        document.getElementById('age').addEventListener('input', checkFormCompletion);
+        document.getElementById('gender').addEventListener('change', checkFormCompletion);
+        document.getElementById('user').addEventListener('change', checkFormCompletion);
+        document.getElementById('admin').addEventListener('change', checkFormCompletion);
+
+        function createCard() {
+            var firstName = document.getElementById('firstName').value;
+            var lastName = document.getElementById('lastName').value;
+            var age = document.getElementById('age').value;
+            var gender = document.getElementById('gender').value;
+
+            // Проверка заполнения всех полей
+            if (firstName === '' || lastName === '' || age === '') {
+                alert('Пожалуйста, заполните все поля.');
+                return;
+            }
+
+            // Получение выбранной должности и установка аватара
+            var positions = [];
+            var avatar;
+            if (document.getElementById('user').checked) {
+                positions.push('User');
+                avatar = '1.jpeg'; // Путь к изображению для User
+            }
+            if (document.getElementById('admin').checked) {
+                positions.push('Admin');
+                avatar = '2.jpeg'; // Путь к изображению для Admin
+            }
+            var positionText = positions.join(', ');
+
+            // Установка данных в визитной карточке
+            document.getElementById('cardAvatar').src = avatar;
+            document.getElementById('cardFirstName').innerText = `Имя: ${firstName}`;
+            document.getElementById('cardLastName').innerText = `Фамилия: ${lastName}`;
+            document.getElementById('cardAge').innerText = `Возраст: ${age}`;
+            document.getElementById('cardGender').innerText = `Пол: ${gender}`;
+            document.getElementById('cardPosition').innerText = `Должность: ${positionText}`;
+
+            // Отображение визитной карточки и скрытие формы
+            document.getElementById('card').style.display = 'block';
+            document.getElementById('form').style.display = 'none';
+        }
+
+
+
+        
+    </script>
+</body>
+
+
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JavaScript Prompt Example</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        #message, #result {
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Доброго времени суток</h1>
+    <p id="question">Давай ответить на вопросик?</p>
+    <div id="form">
+        <label for="name">Как вас зовут?</label>
+        <input type="text" id="name" placeholder="Введите ваше имя">
+        <button onclick="submitName()">Отправить</button>
+    </div>
+    <div id="message"></div>
+
+    <h2>Вычислить максимальное из двух чисел</h2>
+    <div id="calc-form">
+        <label for="num1">Число 1:</label>
+        <input type="number" id="num1" placeholder="Введите первое число">
+        <label for="num2">Число 2:</label>
+        <input type="number" id="num2" placeholder="Введите второе число">
+        <button onclick="calculateMax()">Вычислить</button>
+    </div>
+    <div id="result"></div>
+
+    <script>
+        function submitName() {
+            var name = document.getElementById('name').value;
+            var messageDiv = document.getElementById('message');
+            if (name) {
+                messageDiv.innerHTML = "Ваше имя - " + name;
+                document.getElementById('form').style.display = 'none';
+            } else {
+                messageDiv.innerHTML = "Пожалуйста, введите ваше имя.";
+            }
+        }
+
+        function calcD(a, b) {
+            return Math.max(a, b);
+        }
+
+        function calculateMax() {
+            var num1 = parseFloat(document.getElementById('num1').value);
+            var num2 = parseFloat(document.getElementById('num2').value);
+            var resultDiv = document.getElementById('result');
+            if (!isNaN(num1) && !isNaN(num2)) {
+                var max = calcD(num1, num2);
+                resultDiv.innerHTML = "Максимальное значение: " + max;
+            } else {
+                resultDiv.innerHTML = "Пожалуйста, введите два числа.";
+            }
+        }
+    </script>
+</body>
+</html>
